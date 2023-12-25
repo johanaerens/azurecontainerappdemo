@@ -17,7 +17,8 @@ springBoot {
 }
 
 java {
-    sourceCompatibility = '17'
+    sourceCompatibility = '21'
+    targetCompatibility = '21'
 }
 
 repositories {
@@ -56,6 +57,10 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.named("bootBuildImage") {
+    builder = "paketobuildpacks/builder-jammy-base:latest"
 }
 
 jib {
