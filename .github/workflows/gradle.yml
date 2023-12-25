@@ -29,7 +29,8 @@ jobs:
         java-version: '21'
         distribution: 'corretto'
 
-    - name: Make gradlew executable
-      run: git update-index --chmod=+x gradlew
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
 
-    - run: ./gradlew build --no-daemon
+    - name: Run build with Gradle Wrapper
+      run: ./gradlew build
