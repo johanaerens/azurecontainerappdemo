@@ -41,20 +41,20 @@ jobs:
         run: gradle build
 
       - name: Build and Push ACR Image
-        env:
-          ACR_REGISTRY: mytest.azurecr.io  # Replace with your ACR login server
-          ACR_REPOSITORY: tfs-search-service  # Replace with the desired ACR repository
-          ACR_IMAGE_TAG: ${{ github.sha }}
         run: gradle jib -Djib.to.auth.username=${{ secrets.JOHANAERENSDEMOAPP_REGISTRY_USERNAME }} -Djib.to.auth.password=${{ secrets.JOHANAERENSDEMOAPP_REGISTRY_PASSWORD }} -Djib.to.image=securexacr001.azurecr.io/demo:${{ github.sha }}
 #        run: gradle jib -Djib.to.auth.username=${{ secrets.JOHANAERENSDEMOAPP_REGISTRY_USERNAME }} -Djib.to.auth.password=${{ secrets.JOHANAERENSDEMOAPP_REGISTRY_PASSWORD }}
 
-      - name: Build and push container image to registry
-        uses: azure/container-apps-deploy-action@v2
-        with:
-          appSourcePath: ${{ github.workspace }}
-          registryUrl: securexacr001.azurecr.io
-          registryUsername: ${{ secrets.JOHANAERENSDEMOAPP_REGISTRY_USERNAME }}
-          registryPassword: ${{ secrets.JOHANAERENSDEMOAPP_REGISTRY_PASSWORD }}
-          containerAppName: johanaerensdemo-app
-          resourceGroup: rg-containerapps-sbx
-          imageToBuild: securexacr001.azurecr.io/demo:${{ github.sha }}
+      - name: Deploy new app
+        run: az containerapp update --name johanaerensdemo-app --resource-group rg-containerapps-sbx --image securexacr001.azurecr.io/demo:${{ github.sha }}
+
+
+#      - name: Build and push container image to registry
+#        uses: azure/container-apps-deploy-action@v2
+#        with:
+#          appSourcePath: ${{ github.workspace }}
+#          registryUrl: securexacr001.azurecr.io
+#          registryUsername: ${{ secrets.JOHANAERENSDEMOAPP_REGISTRY_USERNAME }}
+#          registryPassword: ${{ secrets.JOHANAERENSDEMOAPP_REGISTRY_PASSWORD }}
+#          containerAppName: johanaerensdemo-app
+#          resourceGroup: rg-containerapps-sbx
+#          imageToBuild: securexacr001.azurecr.io/demo:${{ github.sha }}
