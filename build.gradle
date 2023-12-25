@@ -10,7 +10,7 @@ def buildNmbr = '-SNAPSHOT'
 if (project.hasProperty('buildNmbr')) {
     buildNmbr = '.' + project.buildNmbr
 }
-project.version = '0.0.1' + buildNmbr
+project.version = '0.0.2' + buildNmbr
 
 springBoot {
     buildInfo()
