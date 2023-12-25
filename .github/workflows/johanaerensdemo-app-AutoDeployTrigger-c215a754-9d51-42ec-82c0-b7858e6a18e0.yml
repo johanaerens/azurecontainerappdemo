@@ -4,15 +4,15 @@ name: Trigger auto deployment for johanaerensdemo-app
 on:
   # Automatically trigger it when detected changes in repo
   push:
-    branches: 
+    branches:
       [ master ]
     paths:
-    - '**'
-    - '.github/workflows/johanaerensdemo-app-AutoDeployTrigger-c215a754-9d51-42ec-82c0-b7858e6a18e0.yml'
+      - '**'
+      - '.github/workflows/johanaerensdemo-app-AutoDeployTrigger-c215a754-9d51-42ec-82c0-b7858e6a18e0.yml'
 
-  # Allow manual trigger 
+  # Allow manual trigger
   workflow_dispatch:
-      
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -26,17 +26,28 @@ jobs:
         with:
           creds: ${{ secrets.JOHANAERENSDEMOAPP_AZURE_CREDENTIALS }}
 
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: current
+
+      - name: Run build with Gradle Wrapper
+        run: gradle build
+
+      - name: Build and Push ACR Image
+        env:
+          ACR_REGISTRY: mytest.azurecr.io  # Replace with your ACR login server
+          ACR_REPOSITORY: tfs-search-service  # Replace with the desired ACR repository
+          ACR_IMAGE_TAG: ${{ github.sha }}
+        run: gradle jib -Djib.to.auth.username=${{ secrets.JOHANAERENSDEMOAPP_REGISTRY_USERNAME }} -Djib.to.auth.password=${{ secrets.JOHANAERENSDEMOAPP_REGISTRY_PASSWORD }} -Djib.to.image=securexacr001.azurecr.io/johanaerensdemo-app:${{ github.sha }}
+
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
-          appSourcePath: ${{ github.workspace }} 
+          appSourcePath: ${{ github.workspace }}
           registryUrl: securexacr001.azurecr.io
           registryUsername: ${{ secrets.JOHANAERENSDEMOAPP_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.JOHANAERENSDEMOAPP_REGISTRY_PASSWORD }}
           containerAppName: johanaerensdemo-app
           resourceGroup: rg-containerapps-sbx
           imageToBuild: securexacr001.azurecr.io/johanaerensdemo-app:${{ github.sha }}
-          
-
-     
-
