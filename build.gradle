@@ -44,7 +44,7 @@ dependencies {
     implementation 'com.azure.spring:spring-cloud-azure-starter-actuator'
 //    implementation 'com.azure.spring:spring-cloud-azure-starter-keyvault'
     implementation 'com.azure.spring:spring-cloud-azure-appconfiguration-config-web'
-    implementation 'com.microsoft.azure:applicationinsights-runtime-attach:3.4.19'
+//    implementation 'com.microsoft.azure:applicationinsights-runtime-attach:3.4.19'
 //	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
