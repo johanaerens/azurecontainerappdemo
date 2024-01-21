@@ -1,0 +1,47 @@
+spring:
+  cloud:
+    azure:
+      appconfiguration:
+        enabled: true
+        stores[0]:
+          connection-string: https://containerappsconfigurationsbx.azconfig.io
+          selects[0]:
+            key-filter: /${spring.application.name}/
+          monitoring:
+            enabled: true
+            refresh-interval: 5s
+            triggers[0]:
+              key: sentinel
+              label: dev
+        credential:
+          managed-identity-enabled: true
+  application:
+    name: containerappdemoservice
+  config:
+    activate:
+      on-profile: containerapps
+#  profiles:
+#    active: dev
+---
+spring:
+  cloud:
+    azure:
+      appconfiguration:
+        enabled: true
+        stores[0]:
+          connection-string: ${APP_CONFIGURATION_CONNECTION_STRING}
+          selects[0]:
+            key-filter: /${spring.application.name}/
+          monitoring:
+            enabled: true
+            refresh-interval: 5s
+            triggers[0]:
+              key: sentinel
+              label: dev
+  application:
+    name: containerappdemoservice
+#  profiles:
+#    active: dev
+  config:
+    activate:
+      on-profile: dev

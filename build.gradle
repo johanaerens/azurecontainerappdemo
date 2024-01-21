@@ -10,11 +10,16 @@ def buildNmbr = '-SNAPSHOT'
 if (project.hasProperty('buildNmbr')) {
     buildNmbr = '.' + project.buildNmbr
 }
-project.version = '0.0.3' + buildNmbr
+project.version = '0.0.5' + buildNmbr
 
 springBoot {
     buildInfo()
 }
+
+bootRun {
+    systemProperty 'spring.profiles.active', 'dev'
+}
+
 
 java {
     sourceCompatibility = '21'
@@ -35,10 +40,11 @@ dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-//    implementation 'com.azure.spring:spring-cloud-azure-starter'
-//    implementation 'com.azure.spring:spring-cloud-azure-starter-actuator'
+    implementation 'com.azure.spring:spring-cloud-azure-starter'
+    implementation 'com.azure.spring:spring-cloud-azure-starter-actuator'
 //    implementation 'com.azure.spring:spring-cloud-azure-starter-keyvault'
-//    implementation 'org.springframework.cloud:spring-cloud-starter-config'
+    implementation 'com.azure.spring:spring-cloud-azure-appconfiguration-config-web'
+    implementation 'com.microsoft.azure:applicationinsights-runtime-attach:3.4.19'
 //	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
@@ -50,7 +56,7 @@ dependencies {
 
 dependencyManagement {
     imports {
-//        mavenBom "com.azure.spring:spring-cloud-azure-dependencies:${springCloudAzureVersion}"
+        mavenBom "com.azure.spring:spring-cloud-azure-dependencies:${springCloudAzureVersion}"
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
